@@ -27,18 +27,18 @@ def load_data(ticker):
 
 
 data_load_state = st.text('Loading data...')
-df = load_data(selected_stock)
+df_import = load_data(selected_stock)
 data_load_state.text('Loading data... done!')
 
 st.subheader('Last Five Days')
-st.write(df.tail())
+st.write(df_import.tail())
 
 
 def plot_raw_data():
     fig = go.Figure()
     # fig.add_trace(go.Scatter(x=data.Date, y=data['Open'], name="stock_open",line_color='deepskyblue'))
     fig.add_trace(go.Scatter(
-        x=df.Date, y=df['Close'], name="stock_close", line_color='deepskyblue'))
+        x=df_import.Date, y=df_import['Close'], name="stock_close", line_color='deepskyblue'))
     fig.layout.update(
         title_text='Time Series data with Rangeslider', xaxis_rangeslider_visible=True)
     st.plotly_chart(fig)
@@ -53,12 +53,11 @@ plot_raw_data()
 
 data_load_state = st.text('Loading Model...')
 
-data_main = df.filter(['Close'])
+data_main = df_import.filter(['Close'])
 current_data = np.array(data_main).reshape(-1, 1).tolist()
 
 n = 60
-data = data_main.drop(data_main.tail(n).index, inplace = True)
-
+data_main.drop(data_main.tail(n).index, inplace = True)
 
 df = np.array(data).reshape(-1, 1)
 scaler = MinMaxScaler(feature_range=(0, 1))
@@ -84,8 +83,9 @@ model.add(Dense(1))
 model.compile(optimizer='adam', loss='mean_squared_error')
 model.fit(x_train, y_train, batch_size=1, epochs=1)
 
+data_test = df_import.filter(['Close'])
 
-df2 = np.array(data_main).reshape(-1, 1)
+df2 = np.array(data_test).reshape(-1, 1)
 scaler = MinMaxScaler(feature_range=(0, 1))
 scaled_df2 = scaler.fit_transform(np.array(df2).reshape(-1, 1))
 
