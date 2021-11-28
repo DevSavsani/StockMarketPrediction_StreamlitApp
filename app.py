@@ -59,7 +59,7 @@ current_data = np.array(data_main).reshape(-1, 1).tolist()
 n = 60
 data_main.drop(data_main.tail(n).index, inplace = True)
 
-df = np.array(data).reshape(-1, 1)
+df = np.array(data_main).reshape(-1, 1)
 scaler = MinMaxScaler(feature_range=(0, 1))
 scaled_df = scaler.fit_transform(np.array(df).reshape(-1, 1))
 train_data = scaled_df[0: , :]
