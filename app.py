@@ -53,14 +53,17 @@ plot_raw_data()
 
 data_load_state = st.text('Loading Model...')
 
-data = df.filter(['Close'])
-current_data = np.array(data).reshape(-1, 1).tolist()
+data_main = df.filter(['Close'])
+current_data = np.array(data_main).reshape(-1, 1).tolist()
+
+n = 60
+data = data_main.drop(data_main.tail(n).index, inplace = True)
 
 
 df = np.array(data).reshape(-1, 1)
 scaler = MinMaxScaler(feature_range=(0, 1))
 scaled_df = scaler.fit_transform(np.array(df).reshape(-1, 1))
-train_data = scaled_df[0: , :-60]
+train_data = scaled_df[0: , :]
 
 x_train = []
 y_train = []
