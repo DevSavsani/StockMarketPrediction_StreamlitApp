@@ -84,7 +84,12 @@ model.add(Dense(1))
 model.compile(optimizer='adam', loss='mean_squared_error')
 model.fit(x_train, y_train, batch_size=1, epochs=1)
 
-test_data = scaled_df[-60:, :].tolist()
+
+df2 = np.array(data_main).reshape(-1, 1)
+scaler = MinMaxScaler(feature_range=(0, 1))
+scaled_df2 = scaler.fit_transform(np.array(df2).reshape(-1, 1))
+
+test_data = scaled_df2[-60:, :].tolist()
 x_test = []
 y_test = []
 for i in range(60, 70):
